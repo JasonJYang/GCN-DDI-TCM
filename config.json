@@ -1,0 +1,55 @@
+{
+    "name": "DDI-GCN",
+    "n_gpu": 1,
+
+    "arch": {
+        "type": "DDIGCN",
+        "args": {
+            "emb_dim": 64,
+            "gcn_layersize": [64, 128, 64],
+            "dropout": 0.1
+        }
+    },
+    "data_loader": {
+        "type": "DDIGraphDataLoader",
+        "args":{
+            "data_dir": "data/",
+            "batch_size": 1024,
+            "shuffle": true,
+            "validation_split": 0.1,
+            "test_split": 0.2,
+            "num_workers": 2
+        }
+    },
+    "optimizer": {
+        "type": "Adam",
+        "args":{
+            "lr": 0.001,
+            "weight_decay": 0,
+            "amsgrad": true
+        }
+    },
+    "loss": "bce_withlogits_loss",
+    "metrics": [
+        "accuracy", "recall", "precision", "roc_auc"
+    ],
+    "lr_scheduler": {
+        "type": "StepLR",
+        "args": {
+            "step_size": 50,
+            "gamma": 0.1
+        }
+    },
+    "trainer": {
+        "epochs": 100,
+
+        "save_dir": "saved/",
+        "save_period": 100,
+        "verbosity": 2,
+        
+        "monitor": "min val_loss",
+        "early_stop": 10,
+
+        "tensorboard": false
+    }
+}
